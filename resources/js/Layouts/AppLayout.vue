@@ -62,6 +62,10 @@ const logout = () => {
                                 <NavLink :href="route('admin.intouch_list')" :active="route().current('admin.intouch_list')">
                                     Customer In Touch
                                 </NavLink>
+                                <Dropdown>
+                                    Dropdown
+                                    <DropdownLink :href="route('admin.intouch_list')" :active="route().current('admin.intouch_list')">Link 1</DropdownLink>
+                                </Dropdown>
                             </div>
                         </div>
 

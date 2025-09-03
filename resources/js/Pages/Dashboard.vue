@@ -1,23 +1,7 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+// import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayout from '@/Layouts/SidebarLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import FileUpload from '@/Components/FileUpload.vue';
-// import TextInput from '@/Components/TextInput.vue';
-// import InputLabel from '@/Components/InputLabel.vue';
-// import SecondaryButton from '@/Components/SecondaryButton.vue';
-// import { useForm } from '@inertiajs/vue3';
-
-// const form = useForm({
-//     name: '',
-//     email: '',
-//     password: ''
-// });
-
-// const submit = () => {
-//     alert('Form submitted');
-//     form.post(route('admin.create'))
-//     console.log(form);
-// };
 </script>
 
 <template>

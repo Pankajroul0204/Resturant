@@ -1,5 +1,6 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+// import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayout from '@/Layouts/SidebarLayout.vue';
 import { Link } from '@inertiajs/vue3';
 import Paginator from '@/Components/PaginationComponent.vue';
 import { useToast } from 'vue-toast-notification';
@@ -236,10 +237,10 @@ const fullmessage = (event, message) => {
                                                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.from
-                                                }}-{{ props.data.to }}</span> of
+                                                    }}-{{ props.data.to }}</span> of
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.total
-                                                    }}</span></span>
+                                                }}</span></span>
 
                                             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                                                 <Paginator :links="props.data.links"></Paginator>

@@ -3,7 +3,10 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
+import { Link } from '@inertiajs/vue3';
+// import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayout from '@/Layouts/SidebarLayout.vue';
+
 import FileUpload from '@/Components/FileUpload.vue';
 import { useForm } from '@inertiajs/vue3'
 
@@ -109,7 +112,8 @@ const submit = () => {
 
                                 <div>
                                     <InputLabel for="designation" value="Enter Designation" class="px-2" />
-                                    <TextInput id="designation" type="text" class="block w-full" v-model="testimonialform.designation" />
+                                    <TextInput id="designation" type="text" class="block w-full"
+                                        v-model="testimonialform.designation" />
                                     <InputError class="mt-2" :message="testimonialform.errors.designation" />
                                 </div>
 

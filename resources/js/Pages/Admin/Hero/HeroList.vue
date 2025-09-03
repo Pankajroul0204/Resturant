@@ -1,5 +1,6 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+// import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayout from '@/Layouts/SidebarLayout.vue';
 import { Link } from '@inertiajs/vue3';
 import Paginator from '@/Components/PaginationComponent.vue';
 const props = defineProps({
