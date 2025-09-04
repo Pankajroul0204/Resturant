@@ -64,7 +64,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## NgROK
 
-create account in ngrok
+<p>create account in ngrok</p>p
 install ngrok npm install ngrok
 config auth key ngrok config add-authtoken NgROK_auth_key
 command to host site  **ngrok http http://127.0.0.1:8000/**
