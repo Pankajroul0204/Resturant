@@ -25,12 +25,12 @@ const deleteResturant = (id) => {
 </script>
 <template>
 
-    <AppLayout title="Hero List" pageName="Hero List.">
+    <AppLayout title="Menu List" pageName="Menu List.">
 
         <template #header>
             <span
                 class="px-5  text-white w-5 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 hover:underline">
-                Hero List.
+                Menu List.
             </span>
             <div class="float-right ">
                 <!-- Breadcrumb -->
@@ -55,9 +55,9 @@ const deleteResturant = (id) => {
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m1 9 4-4-4-4" />
                                 </svg>
-                                <Link :href="route('admin.heroPage')"
+                                <Link :href="route('admin.menuPage')"
                                     class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
-                                Add Hero</Link>
+                                Add Menu</Link>
                             </div>
                         </li>
                         <li>
@@ -68,7 +68,7 @@ const deleteResturant = (id) => {
                                         stroke-width="2" d="m1 9 4-4-4-4" />
                                 </svg>
                                 <span
-                                    class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:text-white">Hero
+                                    class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:text-white">Menu
                                     List</span>
                             </div>
                         </li>
@@ -127,7 +127,7 @@ const deleteResturant = (id) => {
                                                     </th> -->
                                                     <th scope="col" class="px-6 py-3">
                                                         <div class="flex items-center">
-                                                            Resturant Name
+                                                            Item Name
                                                             <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
                                                                     xmlns="http://www.w3.org/2000/svg"
                                                                     fill="currentColor" viewBox="0 0 24 24">
@@ -137,35 +137,21 @@ const deleteResturant = (id) => {
                                                         </div>
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
-                                                        Heading
+                                                        Price
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Category
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
                                                         Description
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
-                                                        Open Interval
+                                                        Availability
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
-                                                        Open Duration
+                                                        Item Image
                                                     </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Booking Status
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        FB Link
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Insta Link
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        X Link
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        You Tube Link
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Created By
-                                                    </th>
+
                                                     <th scope="col" class="px-6 py-3">
                                                         Action
                                                     </th>
@@ -191,10 +177,13 @@ const deleteResturant = (id) => {
                                                         </td> -->
                                                         <th scope="row"
                                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                            {{ record.resturant_name }}
+                                                            {{ record.name }}
                                                         </th>
                                                         <td class="px-6 py-4">
-                                                            {{ record.heading }}
+                                                            {{ record.price }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ record.category }}
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             {{ record.description.length > 50 ?
@@ -202,34 +191,11 @@ const deleteResturant = (id) => {
                                                                 record.description }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            {{ record.open_interval }}
+                                                            <template v-if="record.is_available == 1"><span class="text-green-500">Available</span></template>
+                                                            <template v-else><span class="text-red-500">Un Available</span></template>
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            {{ record.open_interval }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ record.open_time_duration_from }}-{{
-                                                                record.open_time_duration_to }}
-                                                        </td>
-                                                        <td class="px-2 py-4">
-                                                            <Link :href="record.fb"
-                                                                class="text-blue-600 hover:underline">FB Link</Link>
-                                                        </td>
-                                                        <td class="px-2 py-4">
-                                                            <Link :href="record.insta"
-                                                                class="text-blue-600 hover:underline">Insta Link</Link>
-                                                        </td>
-                                                        <td class="px-2 py-4">
-                                                            <Link :href="record.x"
-                                                                class="text-blue-600 hover:underline">X Link</Link>
-                                                        </td>
-                                                        <td class="px-1 py-4">
-                                                            <Link :href="record.you_tube"
-                                                                class="text-blue-600 hover:underline">You Tube Link
-                                                            </Link>
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ record.user.name }}
+                                                            <img :src="record.image" alt="" height="300" width="300">
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <Link

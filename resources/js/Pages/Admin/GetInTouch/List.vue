@@ -50,7 +50,7 @@ const fullmessage = (event, message) => {
 </script>
 <template>
 
-    <AppLayout title="Testimonial List">
+    <AppLayout title="Cutomer In Touch List" pageName="In Touch List">
 
         <template #header>
             <span

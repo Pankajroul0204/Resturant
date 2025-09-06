@@ -322,19 +322,22 @@
                     <div class="menu-container isotope-container row gy-4">
 
                         <!-- Regular Menu Items -->
-                        <div class="col-lg-6 isotope-item filter-starters">
+
+                        <div v-for="menu in menus" :key = "menu" class="col-lg-6 isotope-item filter-starters">
                             <div class="menu-item d-flex align-items-center gap-4">
-                                <img src="/img/restaurant/starter-2.webp" alt="Starter"
+                                <img :src="menu.image" alt="image not found"
                                     class="menu-img img-fluid rounded-3">
                                 <div class="menu-content">
-                                    <h5>Bruschetta Trio <span class="menu-tag">Vegetarian</span></h5>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit curabitur sed.</p>
-                                    <div class="price">$8.95</div>
+                                    <h5>{{ menu.name}}
+                                        <!-- <span class="menu-tag">Vegetarian</span> -->
+                                    </h5>
+                                    <p>{{menu.description}}</p>
+                                    <div class="price">₹{{menu.price}}</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-6 isotope-item filter-starters">
+                        <!-- <div class="col-lg-6 isotope-item filter-starters">
                             <div class="d-flex menu-item align-items-center gap-4">
                                 <img src="/img/restaurant/starter-5.webp" alt="Starter"
                                     class="menu-img img-fluid rounded-3">
@@ -416,7 +419,7 @@
                                     <div class="price">$7.95</div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -1201,9 +1204,9 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 
 const props = defineProps({
-    testimonials:Object
+    testimonials:Object,
+    menus:Object
 })
-console.log(props.testimonials)
 const show = ref({
     display: 'none'
 });

@@ -3,9 +3,11 @@ import { ref } from "vue";
 import { Head, Link, usePage, router } from "@inertiajs/vue3";
 import NavLink from "@/Components/NavLink.vue";
 import ApplicationMark from '@/Components/ApplicationMark.vue';
+import Dropdown from '@/Components/Dropdown.vue';
 
 defineProps({
     title: String,
+    pageName: String
 });
 
 const open = ref(false);
@@ -45,38 +47,81 @@ const toggleDropdown = () => {
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Dashboard
                 </NavLink>
-                <NavLink :href="route('admin.heroPage')" :active="route().current('admin.heroPage')"
+                <!-- <NavLink :href="route('admin.heroPage')" :active="route().current('admin.heroPage')"
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Hero
-                </NavLink>
-                <NavLink :href="route('admin.testimonials')" :active="route().current('admin.testimonials')"
-                    class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
-                    Testimonials
-                </NavLink>
+                </NavLink> -->
+                <Dropdown align="right" width="full">
+                    <template #trigger>
+                        <button
+                            class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none">
+                            <span>Testimonials</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="w-full">
+                            <Link :href="route('admin.testimonials')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Add Testimonials
+                            </Link>
+                            <Link :href="route('admin.testimonials_list')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Testimonial List
+                            </Link>
+                        </div>
+                    </template>
+                </Dropdown>
+                <Dropdown align="right" width="full">
+                    <template #trigger>
+                        <button
+                            class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none">
+                            <span>Hero</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="w-full">
+                            <Link :href="route('admin.heroPage')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Add Hero
+                            </Link>
+                            <Link :href="route('admin.HeroList')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Hero List
+                            </Link>
+                        </div>
+                    </template>
+                </Dropdown>
+                <Dropdown align="right" width="full">
+                    <template #trigger>
+                        <button
+                            class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none">
+                            <span>Menu</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="w-full">
+                            <Link :href="route('menu.create')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Add Menu
+                            </Link>
+                            <Link :href="route('admin.menulist')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Menu List
+                            </Link>
+                        </div>
+                    </template>
+                </Dropdown>
                 <NavLink :href="route('admin.intouch_list')" :active="route().current('admin.intouch_list')"
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Customer In Touch
                 </NavLink>
-                <div class="space-y-1">
-                    <button @click="toggleCustomerDropdown"
-                        class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
-                        <span>Customer In Touch</span>
-                        <svg class="w-4 h-4 transition-transform duration-200"
-                            :class="{ 'rotate-180': customerDropdown }" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
 
-                    <div v-if="customerDropdown" class="ml-4 flex flex-col space-y-1">
-                        <NavLink class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100">
-                            List
-                        </NavLink>
-                        <NavLink class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100">
-                            Add New
-                        </NavLink>
-                    </div>
-                </div>
             </nav>
 
             <!-- Settings Dropdown -->
@@ -94,8 +139,7 @@ const toggleDropdown = () => {
                     <div v-if="open" class="absolute left-0 bottom-full mb-2 w-40 bg-white rounded-lg shadow-lg z-50">
                         <Link :href="route('profile.show')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                         Profile</Link>
-                        <Link href="/logout" method="post" as="button"
-                            class="block px-4 py-2 text-red-600 hover:bg-gray-100">
+                        <Link href="/logout" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
                         Logout
                         </Link>
                     </div>
@@ -116,7 +160,7 @@ const toggleDropdown = () => {
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <h1 class="ml-4 text-lg font-semibold truncate">Dashboard</h1>
+                <h1 class="ml-4 text-lg font-semibold truncate">{{ pageName == null ? 'Dashboard' : pageName }}</h1>
             </header>
 
             <!-- Page content -->

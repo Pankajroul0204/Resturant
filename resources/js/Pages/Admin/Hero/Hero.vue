@@ -48,7 +48,7 @@ const submit = () => {
 </script>
 
 <template>
-    <AppLayout title="Hero">
+    <AppLayout title="Hero" pageName="Hero Element Creation.">
         <template #header>
             <span
                 class="px-5  text-white w-5 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 hover:underline">

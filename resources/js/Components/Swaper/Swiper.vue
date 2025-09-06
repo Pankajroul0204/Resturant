@@ -11,8 +11,8 @@
                 </p>
                 <div class="profile mt-auto">
                     <img :src="item.image_url" class="testimonial-img" alt="" />
-                    <h3>{{item.message}}</h3>
                     <h4>{{item.designation}}</h4>
+                    <h3>{{item.message}}</h3>
                 </div>
             </div>
         </swiper-slide>
