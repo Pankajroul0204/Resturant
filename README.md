@@ -64,10 +64,10 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## NgROK
 
-create account in ngrok
+<p>create account in ngrok</p>p
 install ngrok npm install ngrok
 config auth key ngrok config add-authtoken NgROK_auth_key
-command to host site  ngrok http http://127.0.0.1:8000/
+command to host site  **ngrok http http://127.0.0.1:8000/**
 
 ## CORS for vue fix 
 
@@ -83,16 +83,16 @@ add in [vite.config.js] after plugins
 
 ## CORS for laravel setup
 
--> php artisan make:middleware ReferrerPolicyMiddleware
+-> **php artisan make:middleware ReferrerPolicyMiddleware**
 -> In side middleware
-   -> $response = $next($request);
+  ** -> $response = $next($request);
    ->$response->headers->set('Referrer-Policy', 'no-referrer'); // or 'same-origin', etc.
-   ->return $response;
--> global register in [bootstrap/app.php]
+   ->return $response;**
+-> **global register in [bootstrap/app.php]**
     \App\Http\Middleware\ReferrerPolicyMiddleware::class,
--> AppServiceProvider.php in side [boot()] function
+->** AppServiceProvider.php in side [boot()] function**
    if (app()->environment('local')) {
         URL::forceScheme('https');
     }
--> [.env] change [APP_URL]
+->** [.env] change [APP_URL]**
     to public url providede.
