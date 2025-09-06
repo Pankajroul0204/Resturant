@@ -728,8 +728,7 @@
                                 </div>
                                 <div class="payment_mode">
                                     <div>
-                                       <Link class=""><span class="text-warning bi bi-paypal">Pay Now</span></Link>
-                                       <Link class="px-2">Pay Later</Link>
+                                       <Link class="rounded-2 border border-2 border-warning m-2 p-2"><span class="text-warning bi bi-cash-coin"> Pay Now</span></Link>
                                     </div>
                                 </div>
 
