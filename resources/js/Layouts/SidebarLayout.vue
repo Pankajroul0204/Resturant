@@ -121,6 +121,10 @@ const toggleDropdown = () => {
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Customer In Touch
                 </NavLink>
+                <NavLink :href="route('frontend.booking_request_list')" :active="route().current('frontend.booking_request_list')"
+                    class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
+                    Booking Requests
+                </NavLink>
 
             </nav>
 

@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\HeroController;
@@ -7,32 +6,9 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\InTouchController;
 use App\Http\Controllers\Payment\PaymentController;
-use App\Models\Menu;
-use App\Models\Testimonial;
 
 
 include('frontend.php');
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-Route::get('/', function () {
-
-    $testimonial=Testimonial::get();
-    $menus=Menu::get();
-    return Inertia::render('layout', [
-        'canLogin' => Route::has('login'),
-        'testimonials'=>$testimonial,
-        'menus'=>$menus,
-        // 'canRegister' => Route::has('register'),
-        // 'laravelVersion' => Application::VERSION,
-        // 'phpVersion' => PHP_VERSION,
-    ]);
-});
 Route::get('/payment', [PaymentController::class, 'index']);
 Route::get('/payment/order', [PaymentController::class, 'order']);
 Route::get('/payment/orderdetails', [PaymentController::class, 'orderdetails']);
