@@ -678,10 +678,10 @@
                         <div class="reservation-form-wrapper">
                             <div class="form-header">
                                 <h3>Book A Table</h3>
-                                <p>Please fill the form below to make a reservation</p>
                             </div>
 
-                            <form class="php-email-form mt-4" @submit.prevent="submitBooking">
+                            <form class="tbl_booking mt-4" @submit.prevent="submitBooking">
+                                <p>Please fill the form below to make a reservation</p>
                                 <div class="row gy-4">
                                     <div class="col-lg-4 form-group">
                                         <input type="text" v-model="booking.name" class="form-control"
@@ -717,10 +717,6 @@
                                             class="form-control" placeholder="Date">
                                         <InputError :message="booking.errors.booking_datetime" />
                                     </div>
-                                    <!-- <div class="col-lg-4 form-group">
-                                        <input type="time" class="form-control" v-model="booking.booking_time" id="time" placeholder="Time"
-                                            >
-                                    </div> -->
                                     <div class="col-lg-4 form-group">
                                         <select class="form-select" v-model="booking.event_name">
                                             <option value="">Select Event</option>
@@ -735,21 +731,15 @@
                                             placeholder="Special Requests (Optional)"></textarea>
                                     </div>
                                 </div>
-
-                                <div class="my-3">
-                                    <div class="loading">Loading</div>
-                                    <div class="error-message"></div>
-                                    <div class="sent-message">Your booking request was sent. We will call back or send
-                                        an Email to confirm your reservation. Thank you!</div>
-                                </div>
-                                <div class="payment_mode">
+                                <!-- <div class="payment_mode mt-2">
                                     <div>
                                         <Link class="btn btn-outline-warning"
                                             data-bs-toggle="modal" data-bs-target="#paymentModal"><span
                                             class="bi bi-cash-coin"> Confirm Booking</span></Link>
                                     </div>
-                                    <p class="text-warning pt-1">** By paying you can confirm your booking.</p>
-                                </div>
+                                    <p class="text-warning">** By paying you can confirm your booking.</p>
+                                    <p class="text-warning">Or you can wait for a confirmation from our side.</p>
+                                </div> -->
 
                                 <div class="text-center mt-4">
                                     <button type="submit" class="btn-book-table">Book Now</button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TableBookingMail;
 use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use App\Models\Menu;
 use App\Models\TableBooking;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+
 
 class FrontendController extends Controller
 {
@@ -44,7 +47,8 @@ class FrontendController extends Controller
         $data['event_id'] = $req->event_name;
         unset($data['event_name']);
         try {
-            TableBooking::create($data);
+            $data = TableBooking::create($data);
+            Mail::to($data->email)->send(new TableBookingMail($data));
             return redirect()->back()->with('success', 'Booking Request Sent Successfully');
         } catch (\Exception $e) {
             Log::error('Error saving booking details: ' . $e->getMessage());

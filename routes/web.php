@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\InTouchController;
 use App\Http\Controllers\Payment\PaymentController;
 
