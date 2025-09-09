@@ -53,7 +53,7 @@
                     <li>
                         <Link href="#events">Events</Link>
                     </li>
-                    <li class="dropdown"><a href="#"><span>Dropdown</span> <i
+                    <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
                             <li>
@@ -83,7 +83,7 @@
                             <li><a href="#">Dropdown 3</a></li>
                             <li><a href="#">Dropdown 4</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li><a href="#contact">Contact</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -312,10 +312,10 @@
                     <div class="menu-filters isotope-filters mb-5">
                         <ul>
                             <li data-filter="*" class="filter-active">All</li>
-                            <li data-filter=".filter-starters">Starters</li>
-                            <li data-filter=".filter-main">Main Courses</li>
-                            <li data-filter=".filter-dessert">Desserts</li>
-                            <li data-filter=".filter-drinks">Drinks</li>
+                            <li data-filter=".filter-Starter">Starters</li>
+                            <li data-filter=".filter-MainCourse">Main Courses</li>
+                            <li data-filter=".filter-Dessert">Desserts</li>
+                            <li data-filter=".filter-Drink">Drinks</li>
                         </ul>
                     </div>
 
@@ -323,16 +323,16 @@
 
                         <!-- Regular Menu Items -->
 
-                        <div v-for="menu in menus" :key = "menu" class="col-lg-6 isotope-item filter-starters">
+                        <div v-for="menu in menus" :key="menu"
+                            :class="['col-lg-6', 'isotope-item', 'filter-' + menu.category]">
                             <div class="menu-item d-flex align-items-center gap-4">
-                                <img :src="menu.image" alt="image not found"
-                                    class="menu-img img-fluid rounded-3">
+                                <img :src="menu.image" alt="image not found" class="menu-img img-fluid rounded-3">
                                 <div class="menu-content">
-                                    <h5>{{ menu.name}}
+                                    <h5>{{ menu.name }}
                                         <!-- <span class="menu-tag">Vegetarian</span> -->
                                     </h5>
-                                    <p>{{menu.description}}</p>
-                                    <div class="price">₹{{menu.price}}</div>
+                                    <p>{{ menu.description }}</p>
+                                    <div class="price">₹{{ menu.price }}</div>
                                 </div>
                             </div>
                         </div>
@@ -491,7 +491,7 @@
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-                <Swiper :data="props.testimonials"/>
+                <Swiper :data="props.testimonials" />
 
             </div>
         </section><!-- /Testimonials Section -->
@@ -681,21 +681,27 @@
                                 <p>Please fill the form below to make a reservation</p>
                             </div>
 
-                            <form  class="php-email-form mt-4">
+                            <form class="php-email-form mt-4" @submit.prevent="submitBooking">
                                 <div class="row gy-4">
                                     <div class="col-lg-4 form-group">
-                                        <input type="text" v-model="booking.name" class="form-control" placeholder="Your Name">
+                                        <input type="text" v-model="booking.name" class="form-control"
+                                            placeholder="Your Name">
+                                        <InputError :message="booking.errors.name" />
+                                        <!-- <span class="text-danger fw-bolder">{{ booking.errors.name }}</span> -->
                                     </div>
                                     <div class="col-lg-4 form-group">
-                                        <input type="email" class="form-control" v-model="booking.email" placeholder="Your Email"
-                                            >
+                                        <input type="email" class="form-control" v-model="booking.email"
+                                            placeholder="Your Email">
+                                        <InputError :message="booking.errors.email" />
+
                                     </div>
                                     <div class="col-lg-4 form-group">
-                                        <input type="text" class="form-control" v-model="booking.contact_no" placeholder="Your Phone"
-                                            >
+                                        <input type="text" class="form-control" v-model="booking.contact_no"
+                                            placeholder="Your Phone">
+                                        <InputError :message="booking.errors.contact_no" />
                                     </div>
                                     <div class="col-lg-4 form-group">
-                                        <select v-model="booking.no_of_guest" class="form-select" >
+                                        <select v-model="booking.number_of_people" class="form-select">
                                             <option value="">Number of guests</option>
                                             <option value="1">1 Person</option>
                                             <option value="2">2 People</option>
@@ -704,14 +710,24 @@
                                             <option value="5">5 People</option>
                                             <option value="6">6+ People</option>
                                         </select>
+                                        <InputError :message="booking.errors.number_of_people" />
                                     </div>
                                     <div class="col-lg-4 form-group">
-                                        <input type="date" v-model="booking.booking_date" class="form-control" placeholder="Date"
-                                            >
+                                        <input type="datetime-local" v-model="booking.booking_datetime"
+                                            class="form-control" placeholder="Date">
+                                        <InputError :message="booking.errors.booking_datetime" />
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <!-- <div class="col-lg-4 form-group">
                                         <input type="time" class="form-control" v-model="booking.booking_time" id="time" placeholder="Time"
                                             >
+                                    </div> -->
+                                    <div class="col-lg-4 form-group">
+                                        <select class="form-select" v-model="booking.event_name">
+                                            <option value="">Select Event</option>
+                                            <option v-for="event in events" :key="event.id" :value="event.id">{{
+                                                event.event_name }}</option>
+                                        </select>
+                                        <InputError :message="booking.errors.event_name" />
                                     </div>
 
                                     <div class="form-group mt-4">
@@ -728,8 +744,11 @@
                                 </div>
                                 <div class="payment_mode">
                                     <div>
-                                       <Link class="rounded-2 border border-2 border-warning m-2 p-2"><span class="text-warning bi bi-cash-coin"> Pay Now</span></Link>
+                                        <Link class="btn btn-outline-warning"
+                                            data-bs-toggle="modal" data-bs-target="#paymentModal"><span
+                                            class="bi bi-cash-coin"> Confirm Booking</span></Link>
                                     </div>
+                                    <p class="text-warning pt-1">** By paying you can confirm your booking.</p>
                                 </div>
 
                                 <div class="text-center mt-4">
@@ -1053,7 +1072,7 @@
                                                 <i class="bi bi-person"></i>
                                                 <input type="text" class="form-control" v-model="inTouchform.name"
                                                     placeholder="First Name">
-                                                    <span class="text-danger">{{ inTouchform.errors.name }}</span>
+                                                <span class="text-danger">{{ inTouchform.errors.name }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1064,7 +1083,7 @@
                                                 <i class="bi bi-envelope"></i>
                                                 <input type="email" class="form-control" name="email"
                                                     placeholder="Email Address" v-model="inTouchform.email">
-                                                    <span class="text-danger">{{ inTouchform.errors.email }}</span>
+                                                <span class="text-danger">{{ inTouchform.errors.email }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1075,7 +1094,7 @@
                                                 <i class="bi bi-telephone"></i>
                                                 <input type="text" class="form-control" name="phone"
                                                     placeholder="Contact Number" v-model="inTouchform.contact_no">
-                                                    <span class="text-danger">{{ inTouchform.errors.contact_no }}</span>
+                                                <span class="text-danger">{{ inTouchform.errors.contact_no }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1085,7 +1104,7 @@
                                                 <i class="bi bi-text-left"></i>
                                                 <input type="text" class="form-control" name="subject"
                                                     placeholder="Subject" v-model="inTouchform.subject">
-                                                    <span class="text-danger">{{ inTouchform.errors.subject }}</span>
+                                                <span class="text-danger">{{ inTouchform.errors.subject }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1097,7 +1116,7 @@
                                                 <textarea class="form-control" name="message"
                                                     placeholder="Write Message..." style="height: 180px"
                                                     v-model="inTouchform.message"></textarea>
-                                                    <span class="text-danger">{{ inTouchform.errors.message }}</span>
+                                                <span class="text-danger">{{ inTouchform.errors.message }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1192,7 +1211,28 @@
     <!-- Preloader -->
     <!-- <div id="preloader" :style="show"></div> -->
 
-
+    <!-- payment modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning border-warning border-bottom" id="paymentModalLabel">Booking Payment</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between text-warning">
+                        <p>Your will be paying amount to confirm your booking.</p>
+                        <p class="fw-bolder text-warning">₹1000.00</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                        fdprocessedid="l1m3n">Close</button>
+                    <button type="button" class="btn btn-outline-warning"
+                        fdprocessedid="qey8b9">Continue</button></div>
+            </div>
+        </div>
+    </div>
+    <!-- end payment modal -->
 </template>
 
 <script setup>
@@ -1201,10 +1241,12 @@ import Swiper from '@/Components/Swaper/Swiper.vue';
 import { useForm } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
-    testimonials:Object,
-    menus:Object
+    testimonials: Object,
+    menus: Object,
+    events: Object
 })
 const show = ref({
     display: 'none'
@@ -1238,6 +1280,27 @@ onMounted(() => {
     window.addEventListener('load', toggleScrollTop);
     document.addEventListener('scroll', toggleScrollTop);
 
+    setTimeout(() => {
+        const elem = document.querySelector('.isotope-container');
+        if (elem && window.Isotope) {
+            const iso = new window.Isotope(elem, {
+                itemSelector: '.isotope-item',
+                layoutMode: 'masonry'
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.isotope-filters [data-filter]').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // Remove active class from all
+                    document.querySelectorAll('.isotope-filters [data-filter]').forEach(b => b.classList.remove('filter-active'));
+                    // Add active to this
+                    this.classList.add('filter-active');
+                    // Filter
+                    iso.arrange({ filter: this.getAttribute('data-filter') });
+                });
+            });
+        }
+    }, 500);
 })
 
 // get in touch form
@@ -1265,15 +1328,14 @@ const booking = useForm({
     name: '',
     email: '',
     contact_no: '',
-    no_of_guest: '',
-    no_of_guest: '',
-    request: ''
+    number_of_people: '',
+    booking_datetime: '',
+    event_name: '',
+    special_request: '',
 });
 
-const bookingsubmit =(event)=>{
-    event.preventDefault();
-    console.log(booking);
-    booking.post(route('frontend.table_booking'), {
+const submitBooking = () => {
+    booking.post(route('frontend.save_booking_dtls'), {
         onSuccess: () => {
             booking.reset();
         },

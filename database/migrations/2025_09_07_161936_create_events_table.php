@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menu_categories', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
-            $table->text('category_description');
-            $table->text('category_image')->nullable();
-            $table->boolean('dealing')->default(true);
+            $table->string('event_name');
+            $table->text('event_description');
+            $table->integer('capacity');
+            $table->text('image')->nullable();
+            $table->boolean('is_displayed')->default(true)->nullable();
+            $table->boolean('active')->default(true)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menu_categories');
+        Schema::dropIfExists('events');
     }
 };

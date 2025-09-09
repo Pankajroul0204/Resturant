@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('table_bookings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
-            $table->string('contact_no');
-            $table->date('booking_date');
-            $table->time('booking_time');
-            $table->integer('number_of_people');
+            $table->string('email')->nullable();
+            $table->string('contact_no')->nullable();
+            $table->dateTime('booking_datetime');
+            $table->string('number_of_people');
+            $table->unsignedBigInteger('event_id')->nullable();
+            $table->foreign('event_id')->references('id')->on('events');
             $table->string('special_request')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->string('table_number')->nullable();
             $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
-            $table->decimal('amount', 10, 2)->default(0.00);
+            $table->decimal('amount', 10, 2)->default(0.00)->nullable();
             $table->string('payment_method')->nullable();
             $table->string('cancellation_reason')->nullable();
             $table->timestamp('cancelled_at')->nullable();

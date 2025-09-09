@@ -26,12 +26,12 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/vendor/php-email-form/validate.js"></script>
     <script src="/vendor/aos/aos.js"></script>
-    {{-- <script src="/vendor/swiper/swiper-bundle.min.js"></script> --}}
     <script src="/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
 
 
 
