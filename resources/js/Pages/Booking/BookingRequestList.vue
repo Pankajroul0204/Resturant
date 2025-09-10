@@ -10,10 +10,9 @@ const toast = useToast();
 const props = defineProps({
     data: Object
 })
-console.log(props.data.data[0].event.event_name);
-const deleteResturant = (id) => {
+const deleteBooking = (id) => {
     if (confirm("Are you sure you want to delete this record?")) {
-        axios.delete(route('admin.testimonial_delete', { id: id }))
+        axios.delete(route('frontend.deletetbl_request', { id: id }))
             .then(response => {
                 if (response.data.status = 1) {
                     window.location.reload()
@@ -162,7 +161,7 @@ const fullmessage = (event, message) => {
                                                         Contact No
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
-                                                        Subject
+                                                        Booking For
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
                                                         Event Name
@@ -190,16 +189,11 @@ const fullmessage = (event, message) => {
                                                 </tr>
                                                 <template v-else>
                                                     <tr v-for="record in data.data" :key="record"
-                                                       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 ">
+                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 ">
                                                         <th scope="row"
                                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                             {{ record.name }}
                                                         </th>
-                                                        <!-- <th scope="row"
-                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                            <img :src="`${record.image_url}`" alt="Not found"
-                                                                height="100px" width="100px">
-                                                        </th> -->
                                                         <td class="px-6 py-4">
                                                             {{ record.email ?? '--' }}
                                                         </td>
@@ -207,16 +201,18 @@ const fullmessage = (event, message) => {
                                                             {{ record.contact_no ?? '--' }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            {{ record.subject ?? '--' }}
+                                                            {{ record.booking_datetime ?? '--' }}
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             {{ record.event?.event_name ?? '--' }}
                                                         </td>
                                                         <td class="px-6 py-4"
                                                             @mouseover=" fullmessage($event, record.special_request)">
-                                                            {{ record.special_request.length > 50 ?
-                                                                record.special_request.substring(0, 50) + ' ...' :
-                                                                record.special_request }}
+                                                            {{ record.special_request
+                                                                ? (record.special_request.length > 50
+                                                                    ? record.special_request.substring(0, 50) + ' ...'
+                                                            : record.special_request)
+                                                            : 'NA' }}
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <span v-if="record.payment_status == 1"
@@ -227,9 +223,11 @@ const fullmessage = (event, message) => {
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <span v-if="record.status == 1"
-                                                                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ record.status }}</span>
+                                                                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{
+                                                                record.status }}</span>
                                                             <span v-else
-                                                                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ record.status }}</span>
+                                                                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{
+                                                                record.status }}</span>
 
                                                         </td>
                                                         <td class="px-6 py-4">
@@ -244,7 +242,7 @@ const fullmessage = (event, message) => {
                                                                     clip-rule="evenodd" />
                                                             </svg>
                                                             </Link><br>
-                                                            <Link @click="deleteResturant(record.id)" href="#"
+                                                            <Link @click="deleteBooking(record.id)" href="#"
                                                                 class="font-medium text-blue-600 dark:text-red-500 hover:underline">
                                                             <svg class="w-[21px] h-[21px] text-gray-800 dark:text-red-500 hover:text-red-900"
                                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -268,10 +266,10 @@ const fullmessage = (event, message) => {
                                                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.from
-                                                    }}-{{ props.data.to }}</span> of
+                                                }}-{{ props.data.to }}</span> of
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.total
-                                                }}</span></span>
+                                                    }}</span></span>
 
                                             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                                                 <Paginator :links="props.data.links"></Paginator>

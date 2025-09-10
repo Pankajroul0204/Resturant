@@ -63,4 +63,10 @@ class FrontendController extends Controller
             'data' => $data
         ]);
     }
+
+    public function deleteBookingreq($id){
+        $booking = TableBooking::find($id);
+        $booking->delete($id);
+        return response()->json(['status' => 1, 'msg' => 'Deleted Successfully.']);
+    }
 }
