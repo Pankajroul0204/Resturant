@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\TableBooking;
 use Illuminate\Http\Request;
 use Stripe;
 
@@ -16,30 +17,27 @@ class PaymentController extends Controller
         );
     }
 
-    public function index()
-    {
-        dd($this->stripe);
-    }
 
-    public function order(Request $req)
+    public function order($id)
     {
-       $checkout_session = $this->stripe->checkout->sessions->create([
+        $data=TableBooking::find($id)->first();
+        $checkout_session = $this->stripe->checkout->sessions->create([
             'line_items' => [[
-              'price_data' => [
-                'currency' => 'inr',
-                'product_data' => [
-                  'name' => 'Pant',
+                'price_data' => [
+                    'currency' => 'inr',
+                    'product_data' => [
+                        'name' => 'Booking Fee',
+                        'description' => 'Booking payment for id "' . $data->booking_id . '"'
+                    ],
+                    'unit_amount' => 100 * 1000,
                 ],
-                'unit_amount' =>100 * 599,
-              ],
-              'quantity' => 1,
+                'quantity' => 1,
             ]],
             'mode' => 'payment',
             'success_url' => route('payment.success'),
             'cancel_url' => route('payment.cancel'),
-          ]);
-        //   dd($checkout_session);
-          return redirect($checkout_session->url);
+        ]);
+        return redirect($checkout_session->url);
     }
     public function orderdetails()
     {

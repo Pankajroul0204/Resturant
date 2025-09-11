@@ -4,14 +4,13 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\InTouchController;
 use App\Http\Controllers\Payment\PaymentController;
 
 
 include('frontend.php');
-Route::get('/payment', [PaymentController::class, 'index']);
-Route::get('/payment/order', [PaymentController::class, 'order']);
+Route::get('/payment/{id}', [PaymentController::class, 'order']);
+Route::get('/payment/order', [PaymentController::class, 'index']);
 Route::get('/payment/orderdetails', [PaymentController::class, 'orderdetails']);
 Route::get('/payment/success', function () {
     return "Payment Successfull";

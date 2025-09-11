@@ -22,7 +22,7 @@
             <table style="border-collapse: collapse; margin-top: 15px; margin-left: auto; margin-right: auto;">
                 <tr>
                     <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left;">Booking ID</th>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left;">{{ $data['id'] }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left;">{{ $data['booking_id'] }}</td>
                 </tr>
                 <tr>
                     <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left;">Date & Time</th>

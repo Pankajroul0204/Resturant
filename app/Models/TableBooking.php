@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Str;
 
 class TableBooking extends Model
 {
@@ -27,14 +28,29 @@ class TableBooking extends Model
         'completed_at',
     ];
 
-    public function event(){
+ protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($booking) {
+            $booking->booking_id = $booking->generateBookingId();
+        });
+    }
+
+    public function generateBookingId()
+    {
+        return 'TBK-' . now()->format('YmdHis') . '_' . strtoupper(Str::random(6));
+    }
+    public function event()
+    {
         return $this->belongsTo(Event::class);
     }
 
-    protected function bookingDatetime(): Attribute{
+    protected function bookingDatetime(): Attribute
+    {
         return Attribute::make(
             set: fn($value) => Carbon::parse($value)->format('Y-m-d H:i:s'),
-            get: fn ($value) => $value? Carbon::parse($value)->format('l, M d, Y g:i A'): null
+            get: fn($value) => $value ? Carbon::parse($value)->format('l, M d, Y g:i A') : null
         );
     }
 }
