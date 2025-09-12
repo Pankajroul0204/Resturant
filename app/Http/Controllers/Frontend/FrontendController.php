@@ -56,9 +56,18 @@ class FrontendController extends Controller
         }
     }
 
-    public function bookingRequestList()
+    public function bookingRequestList(Request $req)
     {
-        $data = TableBooking::with('event')->orderBy('id', 'desc')->paginate(10);
+        $query = TableBooking::with('event')->orderBy('id', 'desc');
+        if($req->has('search') && !empty($req->search)){
+            $search = $req->search;
+            $query->where(function($q) use ($search){
+                $q->where('name','like',"%{$search}%")
+                  ->orWhere('email','like',"%{$search}%")
+                  ->orWhere('contact_no','like',"%{$search}%");
+            });
+        }
+        $data = $query->paginate(10);
         return Inertia::render('Booking/BookingRequestList', [
             'data' => $data
         ]);
@@ -68,5 +77,12 @@ class FrontendController extends Controller
         $booking = TableBooking::find($id);
         $booking->delete($id);
         return response()->json(['status' => 1, 'msg' => 'Deleted Successfully.']);
+    }
+
+    public function bookingpayment_statuschange($booking_id){
+        $data=TableBooking::find($booking_id);
+        $data->payment_status='paid';
+        $data->save();
+        return response()->json(['status'=>1]);
     }
 }

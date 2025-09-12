@@ -1,15 +1,18 @@
 <script setup>
 // import AppLayout from '@/Layouts/AppLayout.vue';
 import AppLayout from '@/Layouts/SidebarLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import Paginator from '@/Components/PaginationComponent.vue';
 import { useToast } from 'vue-toast-notification';
+import { ref, watch } from 'vue';
+import axios from 'axios';
 
 const toast = useToast();
 
 const props = defineProps({
     data: Object
 })
+
 const deleteBooking = (id) => {
     if (confirm("Are you sure you want to delete this record?")) {
         axios.delete(route('frontend.deletetbl_request', { id: id }))
@@ -47,6 +50,34 @@ const fullmessage = (event, message) => {
         document.body.removeChild(tooltip);
     }, { once: true });
 }
+
+const paid = (id) => {
+    if (confirm('Are you sure about payment?')) {
+        axios.get(route('frontend.bookingpayment_statuschange', { id: id }))
+            .then(response => {
+                if (response.data.status == 1) {
+                    window.location.reload()
+                }
+            })
+    }
+
+}
+
+const filters = ref({
+    search: ''
+})
+watch(() => filters.value.search, (newValue) => {
+    if (newValue === '') {
+        router.get(route('frontend.booking_request_list'), {}, { preserveState: true, replace: true })
+    }
+})
+function search() {
+    router.get(
+        route('frontend.booking_request_list'),
+        { search: filters.value.search },
+        { preserveState: true, replace: true }
+    )
+}
 </script>
 <template>
 
@@ -73,7 +104,7 @@ const fullmessage = (event, message) => {
                             Home
                             </Link>
                         </li>
-                        <!-- <li>
+                        <li>
                             <div class="flex items-center">
                                 <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -84,7 +115,7 @@ const fullmessage = (event, message) => {
                                     class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
                                 Add Testimonial</Link>
                             </div>
-                        </li> -->
+                        </li>
                         <li>
                             <div class="flex items-center">
                                 <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
@@ -132,9 +163,9 @@ const fullmessage = (event, message) => {
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <input type="search" id="table-search"
+                                        <input type="search" id="table-search" v-model="filters.search"
                                             class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Search for items">
+                                            placeholder="Search for items" @keyup="search">
                                     </div>
 
                                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -211,23 +242,24 @@ const fullmessage = (event, message) => {
                                                             {{ record.special_request
                                                                 ? (record.special_request.length > 50
                                                                     ? record.special_request.substring(0, 50) + ' ...'
-                                                            : record.special_request)
-                                                            : 'NA' }}
+                                                                    : record.special_request)
+                                                                : 'NA' }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            <span v-if="record.payment_status == 1"
+                                                            <span v-if="record.payment_status == 'paid'"
                                                                 class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Paid</span>
-                                                            <span v-else
-                                                                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Unpaid</span>
+                                                            <button v-else
+                                                                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+                                                                @click="paid(record.id)">Unpaid</button>
 
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <span v-if="record.status == 1"
                                                                 class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{
-                                                                record.status }}</span>
+                                                                    record.status }}</span>
                                                             <span v-else
                                                                 class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{
-                                                                record.status }}</span>
+                                                                    record.status }}</span>
 
                                                         </td>
                                                         <td class="px-6 py-4">
