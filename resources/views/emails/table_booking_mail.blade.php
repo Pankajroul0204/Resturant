@@ -39,7 +39,7 @@
             <p>Total Amount: <strong>₹1000</strong></p>
 
             <p style="margin-top: 20px;">
-                <a href="{{ url('/payment/' . $data['id']) }}"
+                <a href="{{$data['payment_url']}}"
                     style="display: inline-block; padding: 12px 20px; background: #4CAF50; text-decoration: none; border-radius: 6px; font-weight: bold; color: #fff !important;">Complete
                     Payment</a>
             </p>

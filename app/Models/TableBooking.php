@@ -26,7 +26,8 @@ class TableBooking extends Model
         'cancelled_at',
         'confirmed_at',
         'completed_at',
-        'booking_id'
+        'booking_id',
+        'session_id'
     ];
 
  protected static function boot()

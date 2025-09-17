@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->string('table_number')->nullable();
             $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
+            $table->string('session_id')->nullable();
             $table->decimal('amount', 10, 2)->default(0.00)->nullable();
             $table->string('payment_method')->nullable();
             $table->string('cancellation_reason')->nullable();
