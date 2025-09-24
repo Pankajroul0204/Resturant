@@ -30,7 +30,7 @@
                 <!-- Uncomment the line below if you also wish to use an image logo -->
                 <!-- <img src="/public/img/logo.webp" alt=""> -->
                 <i class="bi bi-fork-knife"></i>
-                <h1 class="sitename">NiceRestaurant</h1>
+                <h1 class="sitename">{{props.resturant[0].resturant_name ??'Resturant Name'}}</h1>
             </a>
 
             <nav id="navmenu" class="navmenu">
@@ -102,14 +102,23 @@
                 <div class="row g-0 align-items-center">
                     <div class="col-lg-6 content-col">
                         <div class="content-wrapper">
-                            <div class="status-badge">Reservations Open</div>
-                            <h2>Savor the Moment, One Bite at a Time</h2>
-                            <p>Discover a journey of flavors at our exquisite restaurant. Immerse yourself in a
-                                delightful dining experience crafted with passion and precision.</p>
+                            <div v-if="props.resturant[0]">
+                                <template v-if="props.resturant[0].booking_status == 1">
+                                    <div class="status-badge">RESERVATION OPEN</div>
+                                </template>
+                                <template v-else>
+                                    <div class="status-badge closed">RESERVATION CLOSED</div>
+                                </template>
+                            </div>
+                            <div v-else>
+                                <div class="status-badge">RESERVATION OPEN</div>
+                            </div>
+                            <h2>{{props.resturant[0].heading??'Resturant Heading'}}</h2>
+                            <p>{{props.resturant[0].description??'Discover a journey of flavors at our exquisite restaurant. Immerse yourself in a delightful dining experience crafted with passion and precision.'}}</p>
 
                             <div class="opening-hours" data-aos="fade-up" data-aos-delay="500">
                                 <i class="bi bi-clock"></i>
-                                <span>Open Daily: 11am - 10pm</span>
+                                <span>{{props.resturant[0].open_interval+' : '+props.resturant[0].open_time_duration_from+'-'+props.resturant[0].open_time_duration_to??'Open Daily: 11am - 10pm'}}</span>
                             </div>
 
                             <div class="btn-group">
@@ -118,10 +127,10 @@
                             </div>
 
                             <div class="social-links">
-                                <a href="#"><i class="bi bi-facebook"></i></a>
-                                <a href="#"><i class="bi bi-instagram"></i></a>
-                                <a href="#"><i class="bi bi-twitter"></i></a>
-                                <a href="#"><i class="bi bi-youtube"></i></a>
+                                <Link :href=" props.resturant[0].fb??'#'"><i class="bi bi-facebook"></i></Link>
+                                <Link :href=" props.resturant[0].insta??'#'"><i class="bi bi-instagram"></i></Link>
+                                <Link :href=" props.resturant[0].x??'#'"><i class="bi bi-twitter"></i></Link>
+                                <Link :href=" props.resturant[0].you_tube??'#'"><i class="bi bi-youtube"></i></Link>
                             </div>
                         </div>
                     </div>
@@ -1138,15 +1147,15 @@
             <div class="row gy-4">
                 <div class="col-lg-5 col-md-12 footer-about">
                     <a href="index.html" class="logo d-flex align-items-center">
-                        <span class="sitename">NiceRestaurant</span>
+                        <span class="sitename">{{props.resturant[0].resturant_name ??'Resturant Name'}}</span>
                     </a>
                     <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita
                         valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
                     <div class="social-links d-flex mt-4">
-                        <a href=""><i class="bi bi-twitter-x"></i></a>
-                        <a href=""><i class="bi bi-facebook"></i></a>
-                        <a href=""><i class="bi bi-instagram"></i></a>
-                        <a href=""><i class="bi bi-linkedin"></i></a>
+                        <Link :href="props.resturant[0].x ??'#'"><i class="bi bi-twitter-x"></i></Link>
+                        <Link :href="props.resturant[0].fb ??'#'"><i class="bi bi-facebook"></i></Link>
+                        <Link :href="props.resturant[0].insta ??'#'"><i class="bi bi-instagram"></i></Link>
+                        <!-- <Link :href="props.resturant[0].linkedin ??'#'"><i class="bi bi-linkedin"></i></Link> -->
                     </div>
                 </div>
 
@@ -1185,10 +1194,10 @@
         </div>
 
         <div class="container copyright text-center mt-4">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">NiceRestaurant</strong> <span>All Rights
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">{{props.resturant[0].resturant_name ??'Resturant Name'}}</strong> <span>All Rights
                     Reserved</span></p>
             <div class="credits">
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                Designed by <a href="#">Pankaj</a>
             </div>
         </div>
 
@@ -1206,7 +1215,9 @@
         <div class="modal-dialog">
             <div class="modal-content bg-dark">
                 <div class="modal-header">
-                    <h5 class="modal-title text-warning border-warning border-bottom" id="paymentModalLabel">Booking Payment</h5>
+                    <h5 class="modal-title text-warning border-warning border-bottom" id="paymentModalLabel">Booking
+                        Payment
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <div class="d-flex justify-content-between text-warning">
@@ -1217,8 +1228,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
                         fdprocessedid="l1m3n">Close</button>
-                    <button type="button" class="btn btn-outline-warning"
-                        fdprocessedid="qey8b9">Continue</button></div>
+                    <button type="button" class="btn btn-outline-warning" fdprocessedid="qey8b9">Continue</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1236,7 +1247,8 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({
     testimonials: Object,
     menus: Object,
-    events: Object
+    events: Object,
+    resturant: Object
 })
 const show = ref({
     display: 'none'
