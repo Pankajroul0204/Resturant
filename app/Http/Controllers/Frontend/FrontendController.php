@@ -14,7 +14,7 @@ use App\Models\Testimonial;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Payment\PaymentController;
-
+use App\Models\Resturant;
 
 class FrontendController extends Controller
 {
@@ -26,12 +26,14 @@ class FrontendController extends Controller
     public function index(Request $req)
     {
         $testimonial = Testimonial::get();
+        $resturant = Resturant::where('resturant_id',1)->get();
         $menus = Menu::get();
         $events = Event::getEvents();
         return Inertia::render('layout', [
             'canLogin' => Route::has('login'),
             'testimonials' => $testimonial,
             'menus' => $menus,
+            'resturant' => $resturant,
             'events' => $events,
             // 'canRegister' => Route::has('register'),
             // 'laravelVersion' => Application::VERSION,
