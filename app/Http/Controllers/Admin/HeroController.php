@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Resturant;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\ImageUpload;
+use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 
 class HeroController extends Controller
@@ -62,15 +63,15 @@ class HeroController extends Controller
                 $resturant->x = $validate['x'];
                 $resturant->you_tube = $validate['you_tube'];
                 $resturant->created_by = Auth::user()->id;
+                $resturant->save();
+
                 if ($request->hasFile('image')) {
-                    $images = [];
                     foreach ($request->file('image') as $image) {
                         $path = ImageUpload::customSaveImage($image, 'hero_banner_images');
                         $images[] = $path;
+                        Image::create(['resturant_id' => $resturant->resturant_id, 'related_to' => 'hero_banner', 'image_path' => $path]);
                     }
-                    $resturant->image = json_encode($images);
                 }
-                $resturant->save();
                 return redirect()->back()->with('success', 'Hero section created successfully.');
             } catch (\Throwable $th) {
                 Log::debug('ERROR :: ' . $th->getMessage());
@@ -81,24 +82,25 @@ class HeroController extends Controller
                 return Inertia::render('Admin/Hero/Hero');
             } else {
                 // dd($id)
-                $data = Resturant::where('resturant_id',$id)->first();
+                $data = Resturant::where('resturant_id', $id)->first();
                 return Inertia::render('Admin/Hero/Hero', ['data' => $data]);
             }
         }
     }
 
-    public function deleteHero($id){
-        $resturant = Resturant::where('resturant_id',$id);
+    public function deleteHero($id)
+    {
+        $resturant = Resturant::where('resturant_id', $id);
         if ($resturant) {
             $resturant->delete();
-            return response()->json(['msg'=>'Hero deleted successfully','status'=>1], 200);
+            return response()->json(['msg' => 'Hero deleted successfully', 'status' => 1], 200);
         } else {
-            return response()->json(['msg'=>'Something went wrong','status'=>0], 200);
+            return response()->json(['msg' => 'Something went wrong', 'status' => 0], 200);
         }
     }
     public function heroList(Request $request)
     {
-        $data = Resturant::with('user')->orderBy('created_at','desc')->paginate();
+        $data = Resturant::with('user')->orderBy('created_at', 'desc')->paginate();
         return Inertia::render('Admin/Hero/HeroList', ['data' => $data]);
     }
 }
