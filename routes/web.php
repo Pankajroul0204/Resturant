@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\InTouchController;
-
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 include('frontend.php');
 include('payment.php');
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -34,4 +34,8 @@ Route::middleware([
     // menu
     Route::resource('menu', MenuController::class);
     Route::get('/menulist', [MenuController::class, 'menulist'])->name('admin.menulist');
+
+
+    // log url
+    Route::get('logs', [LogViewerController::class, 'index']);
 });
