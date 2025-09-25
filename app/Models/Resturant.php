@@ -31,6 +31,11 @@ class Resturant extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'resturant_id');
+    }
+
     protected function openTimeDurationFrom(): Attribute
     {
         return Attribute::make(

@@ -134,10 +134,10 @@ const submit = () => {
                                     <select class="block w-full rounded-md " id="category"
                                         v-model="form.category">
                                         <option value="">Select Item Category</option>
-                                        <option>Starter</option>
-                                        <option>Main Course</option>
-                                        <option>Dessert</option>
-                                        <option>Drink</option>
+                                        <option value="Starter">Starter</option>
+                                        <option value="MainCourse">Main Course</option>
+                                        <option value="Dessert">Dessert</option>
+                                        <option value="Drink">Drink</option>
                                     </select>
                                     <InputError class="mt-2" :message="form.errors.category" />
                                 </div>

@@ -26,7 +26,7 @@ class FrontendController extends Controller
     public function index(Request $req)
     {
         $testimonial = Testimonial::get();
-        $resturant = Resturant::where('resturant_id',1)->get();
+        $resturant = Resturant::where('resturant_id',1)->with(['images','user'])->get();
         $menus = Menu::get();
         $events = Event::getEvents();
         return Inertia::render('layout', [
