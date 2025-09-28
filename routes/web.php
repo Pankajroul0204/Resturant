@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\InTouchController;
+use App\Http\Controllers\Admin\NotificationController;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 include('frontend.php');
 include('payment.php');
@@ -35,7 +36,8 @@ Route::middleware([
     Route::resource('menu', MenuController::class);
     Route::get('/menulist', [MenuController::class, 'menulist'])->name('admin.menulist');
 
-
+    // notifications
+    Route::get('/notifications',[NotificationController::class,'index'])->name('admin.notifications');
     // log url
     Route::get('logs', [LogViewerController::class, 'index']);
 });

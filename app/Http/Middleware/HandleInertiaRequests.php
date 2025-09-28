@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
                 'warning' => fn () => $request->session()->get('warning')
             ],
+            'site_name' => env('APP_NAME', 'Resturant'),
         ]);
     }
 }
