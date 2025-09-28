@@ -37,7 +37,8 @@ Route::middleware([
     Route::get('/menulist', [MenuController::class, 'menulist'])->name('admin.menulist');
 
     // notifications
-    Route::get('/notifications',[NotificationController::class,'index'])->name('admin.notifications');
+    Route::get('/count-notifications',[NotificationController::class,'index'])->name('admin.count_notifications'); //   count
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('admin.notifications'); // all
     // log url
     Route::get('logs', [LogViewerController::class, 'index']);
 });

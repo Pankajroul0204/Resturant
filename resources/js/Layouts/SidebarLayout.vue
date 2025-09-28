@@ -28,7 +28,7 @@ const logout = () => {
 };
 
 onMounted(() => {
-    axios.get(route('admin.notifications'))
+    axios.get(route('admin.count_notifications'))
         .then(response => {
             notificationCount.value = response.data.count;
         })
