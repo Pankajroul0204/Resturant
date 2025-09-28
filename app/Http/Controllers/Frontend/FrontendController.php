@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Models\Resturant;
+use App\Models\User;
+use App\Notifications\BookingNotification;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+
 
 class FrontendController extends Controller
 {
@@ -26,7 +31,7 @@ class FrontendController extends Controller
     public function index(Request $req)
     {
         $testimonial = Testimonial::get();
-        $resturant = Resturant::where('resturant_id',1)->with(['images','user'])->get();
+        $resturant = Resturant::where('resturant_id', 1)->with(['images', 'user'])->get();
         $menus = Menu::get();
         $events = Event::getEvents();
         return Inertia::render('layout', [
@@ -41,49 +46,56 @@ class FrontendController extends Controller
         ]);
     }
 
-public function saveBookingDtls(Request $req)
-{
-
-    $validated = $req->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'contact_no' => 'required',
-        'number_of_people' => 'required|numeric',
-        'booking_datetime' => 'required',
-        'event_name' => 'required',
-        'special_request' => 'nullable|string',
-    ]);
-
-    $validated['event_id'] = $req->event_name;
-    unset($validated['event_name']);
-
-    try {
-        $booking = TableBooking::create($validated);
-        $res = $this->payment->order($booking);
-        $booking->update([
-            'session_id' => $res['session_id'],
+    public function saveBookingDtls(Request $req)
+    {
+        $validated = $req->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'contact_no' => 'required',
+            'number_of_people' => 'required|numeric',
+            'booking_datetime' => 'required',
+            'event_name' => 'required',
+            'special_request' => 'nullable|string',
         ]);
 
-        $booking->payment_url = $res['url'];
-        Mail::to($booking->email)->send(new TableBookingMail($booking));
+        $validated['event_id'] = $req->event_name;
+        unset($validated['event_name']);
 
-        return redirect()->back()->with('success', 'Booking Request Sent Successfully');
-    } catch (\Exception $e) {
-        Log::error('Error saving booking details: ' . $e);
-        return redirect()->back()->with('error', 'Something went wrong.');
+        try {
+            $booking = TableBooking::create($validated);
+            
+            // restro's admin user
+            $adminUser = User::find(1);
+            Notification::sendNow(
+                $adminUser,
+                new BookingNotification($booking)
+            );
+            $res = $this->payment->order($booking);
+            $booking->update([
+                'session_id' => $res['session_id'],
+            ]);
+
+            $booking->payment_url = $res['url'];
+            Mail::to($booking->email)->send(new TableBookingMail($booking));
+
+            return redirect()->back()->with('success', 'Booking Request Sent Successfully');
+        } catch (\Exception $e) {
+            Log::error('Error saving booking details: ' . $e);
+            return redirect()->back()->with('error', 'Something went wrong.');
+        }
     }
-}
 
 
-    public function bookingRequestList(Request $req){
+    public function bookingRequestList(Request $req)
+    {
 
         $query = TableBooking::with('event')->orderBy('id', 'desc');
-        if($req->has('search') && !empty($req->search)){
+        if ($req->has('search') && !empty($req->search)) {
             $search = $req->search;
-            $query->where(function($q) use ($search){
-                $q->where('name','like',"%{$search}%")
-                  ->orWhere('email','like',"%{$search}%")
-                  ->orWhere('contact_no','like',"%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('contact_no', 'like', "%{$search}%");
             });
         }
         $data = $query->paginate(10);
@@ -92,16 +104,18 @@ public function saveBookingDtls(Request $req)
         ]);
     }
 
-    public function deleteBookingreq($id){
+    public function deleteBookingreq($id)
+    {
         $booking = TableBooking::find($id);
         $booking->delete($id);
         return response()->json(['status' => 1, 'msg' => 'Deleted Successfully.']);
     }
 
-    public function bookingpayment_statuschange($booking_id){
-        $data=TableBooking::find($booking_id);
-        $data->payment_status='paid';
+    public function bookingpayment_statuschange($booking_id)
+    {
+        $data = TableBooking::find($booking_id);
+        $data->payment_status = 'paid';
         $data->save();
-        return response()->json(['status'=>1]);
+        return response()->json(['status' => 1]);
     }
 }

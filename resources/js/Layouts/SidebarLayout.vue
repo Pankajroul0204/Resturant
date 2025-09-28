@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import axios from "axios";
 import { Head, Link, usePage, router } from "@inertiajs/vue3";
 import NavLink from "@/Components/NavLink.vue";
 import ApplicationMark from '@/Components/ApplicationMark.vue';
@@ -9,19 +10,32 @@ defineProps({
     title: String,
     pageName: String
 });
-
 const open = ref(false);
 const customerDropdown = ref(false);
 const toggleCustomerDropdown = () => {
     customerDropdown.value = !customerDropdown.value;
 }
 const sidebarOpen = ref(false);
+const notificationCount= ref(0);
 const toggleSidebar = () => {
     sidebarOpen.value = !sidebarOpen.value;
 };
 const toggleDropdown = () => {
     open.value = !open.value;
 };
+const logout = () => {
+    router.post(route('logout'));
+};
+
+onMounted(() => {
+    axios.get(route('admin.notifications'))
+        .then(response => {
+            notificationCount.value = response.data.count;
+        })
+        .catch(error => {
+            console.error('Error fetching notification count:', error);
+        });
+});
 </script>
 
 <template>
@@ -38,7 +52,7 @@ const toggleDropdown = () => {
                 <Link :href="route('dashboard')">
                 <ApplicationMark class="block h-9 w-auto" />
                 </Link>
-                <div class="p-4 text-xl font-bold border-b">My App</div>
+                <div class="p-4 text-xl font-bold border-b">{{ usePage().props.site_name ?? "Site Name" }}</div>
             </div>
 
             <!-- Navigation -->
@@ -64,10 +78,12 @@ const toggleDropdown = () => {
                     </template>
                     <template #content>
                         <div class="w-full">
-                            <Link :href="route('admin.testimonials')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('admin.testimonials')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Add Testimonials
                             </Link>
-                            <Link :href="route('admin.testimonials_list')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('admin.testimonials_list')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Testimonial List
                             </Link>
                         </div>
@@ -86,10 +102,12 @@ const toggleDropdown = () => {
                     </template>
                     <template #content>
                         <div class="w-full">
-                            <Link :href="route('admin.heroPage')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('admin.heroPage')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Add Hero
                             </Link>
-                            <Link :href="route('admin.HeroList')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('admin.HeroList')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Hero List
                             </Link>
                         </div>
@@ -108,10 +126,12 @@ const toggleDropdown = () => {
                     </template>
                     <template #content>
                         <div class="w-full">
-                            <Link :href="route('menu.create')"  class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('menu.create')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Add Menu
                             </Link>
-                            <Link :href="route('admin.menulist')" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <Link :href="route('admin.menulist')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Menu List
                             </Link>
                         </div>
@@ -121,11 +141,21 @@ const toggleDropdown = () => {
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Customer In Touch
                 </NavLink>
-                <NavLink :href="route('frontend.booking_request_list')" :active="route().current('frontend.booking_request_list')"
+                <NavLink :href="route('frontend.booking_request_list')"
+                    :active="route().current('frontend.booking_request_list')"
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Booking Requests
                 </NavLink>
-
+                <NavLink :href="route('admin.notifications')" :active="route().current('admin.notifications')"
+                    class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200 flex items-center justify-between">
+                    <span class="flex items-center">
+                        Notifications
+                    </span>
+                    <span v-if="notificationCount > 0"
+                        class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                        {{ notificationCount }}
+                    </span>
+                </NavLink>
             </nav>
 
             <!-- Settings Dropdown -->
@@ -142,10 +172,14 @@ const toggleDropdown = () => {
                     </button>
                     <div v-if="open" class="absolute left-0 bottom-full mb-2 w-40 bg-white rounded-lg shadow-lg z-50">
                         <Link :href="route('profile.show')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                        Profile</Link>
-                        <Link href="/logout" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
-                        Logout
+                        Profile
                         </Link>
+                        <form @submit.prevent="logout">
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
