@@ -38,7 +38,9 @@ Route::middleware([
 
     // notifications
     Route::get('/count-notifications',[NotificationController::class,'index'])->name('admin.count_notifications'); //   count
-    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('admin.notifications'); // all
-    // log url
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('admin.notifications');
+    Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('admin.mark_as_read');
+    
+    // log-file url
     Route::get('logs', [LogViewerController::class, 'index']);
 });
