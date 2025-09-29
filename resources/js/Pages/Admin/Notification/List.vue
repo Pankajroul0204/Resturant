@@ -2,26 +2,21 @@
 // import AppLayout from '@/Layouts/AppLayout.vue';
 import AppLayout from '@/Layouts/SidebarLayout.vue';
 import { Link } from '@inertiajs/vue3';
-import Paginator from '@/Components/PaginationComponent.vue';
 const props = defineProps({
     notifications: Object
 })
-console.log(props.notifications);
-const deleteResturant = (id) => {
-    if (confirm("Are you sure you want to delete this record?")) {
-        axios.delete(route('admin.heroDelete', { resturant_id: id }))
-            .then(response => {
-                if (response.data.status == 1) {
-                    alert(response.data.msg);
-                    window.location.reload();
-                } else {
-                    alert(response.data.msg);
-                }
-            })
-            .catch(error => {
-                console.error("There was an error deleting the record:", error);
-            });
-    }
+const markAsRead = (id) => {
+    axios.get(route('admin.mark_as_read', { id: id }))
+        .then(response => {
+            if (response.status == 1) {
+                window.location.reload();
+            } else {
+                alert(response.data.msg);
+            }
+        })
+        .catch(error => {
+            console.error("There was an error deleting the record:", error);
+        });
 }
 </script>
 <template>
@@ -92,9 +87,27 @@ const deleteResturant = (id) => {
                                                 <h3 class=" text-lg text-gray-500  font-semibold mb-2">Today</h3>
                                                 <hr class="border-gray-300 mb-4">
                                                 <ul v-if="notifications.today.length">
-                                                    <li class="mb-2 p-3 bg-blue-100 rounded flex justify-between items-end" v-for="n in notifications.today" :key="n.id">
-                                                        <span class="font-medium">{{n.data}}</span>
-                                                        <span class="text-xs text-gray-500">{{n.created_at}}</span>
+                                                    <li class="mb-2 p-3 rounded flex justify-between items-end"
+                                                        v-for="n in notifications.today" :key="n.id">
+                                                        <div v-for="n in notifications.today" :key="n.id"
+                                                            class="flex justify-between w-full px-2 py-1"
+                                                            :class="n.read_at != null ? 'bg-blue-100' : 'bg-gray-100'"
+                                                            @click="markAsRead(n.id)">
+                                                            <span class="font-medium">Table booking request by <b>{{
+                                                                n.data.name
+                                                                    }}({{ n.data.contact_no }})</b> for {{
+                                                                        n.data.number_of_people }} members at {{
+                                                                    n.data.booking_datetime
+                                                                }}</span>
+                                                            <span class="text-xs text-gray-500 text-right">{{
+                                                                n.created_at
+                                                            }}</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul v-else>
+                                                    <li class="mb-2 p-3 text-gray-500 text-center rounded  items-end">
+                                                        <span class="font-medium">No Notifications</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -103,11 +116,28 @@ const deleteResturant = (id) => {
                                             <div class="mb-8">
                                                 <h3 class=" text-lg text-gray-500  font-semibold mb-2">Yesterday</h3>
                                                 <hr class="border-gray-300 mb-4">
-                                                <ul>
-                                                    <li
-                                                        class="mb-2 p-3 bg-blue-100 rounded flex justify-between items-end">
-                                                        <span class="font-medium">Message</span>
-                                                        <span class="text-xs text-gray-500">10:30 AM</span>
+                                                <ul v-if="notifications.yesterday.length">
+                                                    <li class="mb-2 p-3  rounded flex justify-between items-end"
+                                                        v-for="n in notifications.yesterday" :key="n.id">
+                                                        <div v-for="n in notifications.yesterday" :key="n.id"
+                                                            @click="markAsRead(n.id)"
+                                                            class="flex justify-between w-full px-2 py-1"
+                                                            :class="n.read_at != null ? 'bg-blue-100' : 'bg-gray-100'">
+                                                            <span class="font-medium">Table booking request by <b>{{
+                                                                n.data.name
+                                                                    }}({{ n.data.contact_no }})</b> for {{
+                                                                        n.data.number_of_people }} members at {{
+                                                                    n.data.booking_datetime
+                                                                }}</span>
+                                                            <span class="text-xs text-gray-500 text-right">{{
+                                                                n.created_at
+                                                            }}</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul v-else>
+                                                    <li class="mb-2 p-3 text-gray-500 text-center rounded  items-end">
+                                                        <span class="font-medium">No Notifications</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -116,11 +146,29 @@ const deleteResturant = (id) => {
                                             <div class="mb-8">
                                                 <h3 class=" text-lg text-gray-500  font-semibold mb-2">Older</h3>
                                                 <hr class="border-gray-300 mb-4">
-                                                <ul>
-                                                    <li
-                                                        class="mb-2 p-3 bg-blue-100 rounded flex justify-between items-end">
-                                                        <span class="font-medium">Message</span>
-                                                        <span class="text-xs text-gray-500">10:30 AM</span>
+                                                <ul v-if="notifications.older.length">
+                                                    <li class="mb-2 p-3  rounded flex justify-between items-end"
+                                                        :class="{ 'bg-blue-100': n.read_at === null }"
+                                                        v-for="n in notifications.older" :key="n.id">
+                                                        <div v-for="n in notifications.older" :key="n.id"
+                                                            :class="n.read_at != null ? 'bg-blue-100' : 'bg-gray-100'"
+                                                            @click="markAsRead(n.id)"
+                                                            class="flex justify-between w-full px-2 py-1">
+                                                            <span class="font-medium">Table booking request by <b>{{
+                                                                n.data.name
+                                                                    }}({{ n.data.contact_no }})</b> for {{
+                                                                        n.data.number_of_people }} members at {{
+                                                                    n.data.booking_datetime
+                                                                }}</span>
+                                                            <span class="text-xs text-gray-500 text-right">{{
+                                                                n.created_at
+                                                            }}</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul v-else>
+                                                    <li class="mb-2 p-3 text-gray-500 text-center rounded  items-end">
+                                                        <span class="font-medium">No Notifications</span>
                                                     </li>
                                                 </ul>
                                             </div>
