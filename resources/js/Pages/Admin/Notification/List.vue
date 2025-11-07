@@ -101,7 +101,7 @@ const markAsRead = (id) => {
                                                                 }}</span>
                                                             <span class="text-xs text-gray-500 text-right">{{
                                                                 n.created_at
-                                                            }}</span>
+                                                                }}</span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -131,7 +131,7 @@ const markAsRead = (id) => {
                                                                 }}</span>
                                                             <span class="text-xs text-gray-500 text-right">{{
                                                                 n.created_at
-                                                            }}</span>
+                                                                }}</span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -147,13 +147,10 @@ const markAsRead = (id) => {
                                                 <h3 class=" text-lg text-gray-500  font-semibold mb-2">Older</h3>
                                                 <hr class="border-gray-300 mb-4">
                                                 <ul v-if="notifications.older.length">
-                                                    <li class="mb-2 p-3  rounded flex justify-between items-end"
-                                                        :class="{ 'bg-blue-100': n.read_at === null }"
-                                                        v-for="n in notifications.older" :key="n.id">
-                                                        <div v-for="n in notifications.older" :key="n.id"
-                                                            :class="n.read_at != null ? 'bg-blue-100' : 'bg-gray-100'"
-                                                            @click="markAsRead(n.id)"
-                                                            class="flex justify-between w-full px-2 py-1">
+                                                    <div v-for="n in notifications.older" :key="n.id"
+                                                        @click="markAsRead(n.id)"
+                                                        class="flex justify-between w-full px-2 py-1">
+                                                        <li class="px-2 pt-1 rounded flex justify-between items-end" :class="n.read_at != null ? 'bg-blue-100' : 'bg-gray-100'">
                                                             <span class="font-medium">Table booking request by <b>{{
                                                                 n.data.name
                                                                     }}({{ n.data.contact_no }})</b> for {{
@@ -162,9 +159,9 @@ const markAsRead = (id) => {
                                                                 }}</span>
                                                             <span class="text-xs text-gray-500 text-right">{{
                                                                 n.created_at
-                                                            }}</span>
-                                                        </div>
-                                                    </li>
+                                                                }}</span>
+                                                        </li>
+                                                    </div>
                                                 </ul>
                                                 <ul v-else>
                                                     <li class="mb-2 p-3 text-gray-500 text-center rounded  items-end">

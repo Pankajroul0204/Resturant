@@ -137,6 +137,30 @@ onMounted(() => {
                         </div>
                     </template>
                 </Dropdown>
+                <Dropdown align="right" width="full">
+                    <template #trigger>
+                        <button
+                            class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none">
+                            <span>Chef</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="w-full">
+                            <Link :href="route('admin.chef.create')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Add Chef
+                            </Link>
+                            <Link :href="route('admin.chef.index')"
+                                class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Chef List
+                            </Link>
+                        </div>
+                    </template>
+                </Dropdown>
                 <NavLink :href="route('admin.intouch_list')" :active="route().current('admin.intouch_list')"
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Customer In Touch
