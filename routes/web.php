@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Admin\ChefController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\HeroController;
@@ -35,12 +37,22 @@ Route::middleware([
     // menu
     Route::resource('menu', MenuController::class);
     Route::get('/menulist', [MenuController::class, 'menulist'])->name('admin.menulist');
+    // chef
+    Route::resource('chef', ChefController::class)->names([
+        'index' => 'admin.chef.index',
+        'create' => 'admin.chef.create',
+        'store' => 'admin.chef.store',
+        'show' => 'admin.chef.show',
+        'edit' => 'admin.chef.edit',
+        'update' => 'admin.chef.update',
+        'destroy' => 'admin.chef.destroy',
+    ]);
 
     // notifications
     Route::get('/count-notifications',[NotificationController::class,'index'])->name('admin.count_notifications'); //   count
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('admin.notifications');
     Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('admin.mark_as_read');
-    
+
     // log-file url
     Route::get('logs', [LogViewerController::class, 'index']);
 });
