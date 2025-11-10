@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\ChefController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -46,6 +47,17 @@ Route::middleware([
         'edit' => 'admin.chef.edit',
         'update' => 'admin.chef.update',
         'destroy' => 'admin.chef.destroy',
+    ]);
+
+    // about
+    Route::resource('about', AboutController::class)->names([
+        'index' => 'admin.about.index',
+        'create' => 'admin.about.create',
+        'store' => 'admin.about.store',
+        'show' => 'admin.about.show',
+        'edit' => 'admin.about.edit',
+        'update' => 'admin.about.update',
+        'destroy' => 'admin.about.destroy',
     ]);
 
     // notifications
