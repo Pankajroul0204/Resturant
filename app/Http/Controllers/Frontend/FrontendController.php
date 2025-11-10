@@ -14,6 +14,8 @@ use App\Models\Testimonial;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Payment\PaymentController;
+use App\Models\About;
+use App\Models\Chef;
 use App\Models\Resturant;
 use App\Models\User;
 use App\Notifications\BookingNotification;
@@ -34,12 +36,16 @@ class FrontendController extends Controller
         $resturant = Resturant::where('resturant_id', 1)->with(['images', 'user'])->get();
         $menus = Menu::get();
         $events = Event::getEvents();
+        $chef = Chef::get();
+        $about = About::with('chef')->first();
         return Inertia::render('layout', [
             'canLogin' => Route::has('login'),
             'testimonials' => $testimonial,
             'menus' => $menus,
             'resturant' => $resturant,
             'events' => $events,
+            'chefs' => $chef,
+            'about' => $about,
             // 'canRegister' => Route::has('register'),
             // 'laravelVersion' => Application::VERSION,
             // 'phpVersion' => PHP_VERSION,
@@ -63,7 +69,7 @@ class FrontendController extends Controller
 
         try {
             $booking = TableBooking::create($validated);
-            
+
             // restro's admin user
             $adminUser = User::find(1);
             Notification::sendNow(

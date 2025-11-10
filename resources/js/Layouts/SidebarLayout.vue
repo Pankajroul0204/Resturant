@@ -161,6 +161,10 @@ onMounted(() => {
                         </div>
                     </template>
                 </Dropdown>
+                <NavLink :href="route('admin.about.create')" :active="route().current('admin.intouch_list')"
+                    class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
+                    About
+                </NavLink>
                 <NavLink :href="route('admin.intouch_list')" :active="route().current('admin.intouch_list')"
                     class="block w-full rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-200">
                     Customer In Touch

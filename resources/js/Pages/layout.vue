@@ -187,25 +187,24 @@
                 <div class="row align-items-center gy-4">
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
                         <div class="about-content">
-                            <h3>Our Culinary Journey</h3>
-                            <p class="fst-italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                            <h3>{{about.heading}}</h3>
+                            <!-- <p class="fst-italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
                                 varius enim in eros elementum tristique.</p>
                             <p>Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero
                                 vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem
                                 vitae risustristique pos uere. Interdum et malesuada fames ac ante ipsum primis in
-                                faucibus.</p>
+                                faucibus.</p> -->
+                            <p>{{about.description}}</p>
 
                             <div class="chef-signature mt-4">
                                 <div class="row align-items-center">
                                     <div class="col-auto">
-                                        <img src="/img/restaurant/chef-1.webp" class="chef-avatar rounded-circle"
+                                        <img :src="about.chef.image" class="chef-avatar rounded-circle"
                                             alt="Chef Portrait">
                                     </div>
                                     <div class="col">
-                                        <p class="chef-message mb-2">"Cooking is a language through which all the
-                                            following properties may be expressed: harmony, creativity, happiness,
-                                            beauty, poetry, complexity, magic, humor, provocation and culture."</p>
-                                        <p class="chef-name">Executive Chef</p>
+                                        <p class="chef-message mb-2">"{{about.cook_quotes}}"</p>
+                                        <p class="chef-name">{{ about.chef.designation }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -214,13 +213,13 @@
 
                     <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="300">
                         <div class="about-image-wrapper">
-                            <img src="/img/restaurant/showcase-4.webp" class="img-fluid main-image shadow"
+                            <img :src=" about.image1 " class="img-fluid main-image shadow"
                                 alt="Restaurant Interior">
-                            <img src="/img/restaurant/showcase-2.webp" class="img-fluid accent-image shadow"
+                            <img :src=" about.image2 " class="img-fluid accent-image shadow"
                                 alt="Chef Preparing Food">
                             <span
                                 class="establishment-year d-flex align-items-center justify-content-center text-center">Est.
-                                2005</span>
+                                {{about.year_of_establishment}}</span>
                         </div>
                     </div>
                 </div>
@@ -517,23 +516,21 @@
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
                 <div class="row">
-                    <div class="col-lg-5">
+                    <div class="col-lg-5" v-for="executive_chef in executive_chefs" :key="executive_chef.id">
                         <div class="chef-highlight" data-aos="fade-right" data-aos-delay="200">
                             <figure class="chef-image">
-                                <img src="/img/restaurant/chef-1.webp" class="img-fluid" alt="Executive Chef">
+                                <img :src="executive_chef.image" class="img-fluid" :alt="executive_chef.name">
                             </figure>
                             <div class="chef-details">
-                                <h3>Executive Chef</h3>
-                                <h2>Gabriel Turner</h2>
+                                <h3>{{ executive_chef.designation }}</h3>
+                                <h2>{{ executive_chef.name }}</h2>
                                 <div class="chef-awards">
                                     <span><i class="bi bi-star-fill"></i> James Beard Award</span>
                                     <span><i class="bi bi-star-fill"></i> Two Michelin Stars</span>
                                 </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec
-                                    ullamcorper mattis, pulvinar dapibus leo. Proin gravida nibh vel velit auctor
-                                    aliquet. Aenean sollicitudin, lorem quis bibendum auctor nisi elit.</p>
+                                <p>{{ executive_chef.description }}</p>
                                 <div class="chef-signature">
-                                    <img src="/img/misc/signature-1.webp" alt="Chef Signature">
+                                    <img :src="executive_chef.signature" alt="Chef Signature">
                                 </div>
                             </div>
                         </div>
@@ -542,11 +539,10 @@
                     <div class="col-lg-7">
                         <div class="team-container" data-aos="fade-left" data-aos-delay="300">
                             <div class="row g-4">
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-for="regular_chef in regular_chefs" :key="regular_chef.id" >
                                     <div class="chef-card" data-aos="zoom-in" data-aos-delay="200">
                                         <div class="chef-img">
-                                            <img src="/img/restaurant/chef-2.webp" class="img-fluid"
-                                                alt="Chef Portrait">
+                                            <img :src="regular_chef.image" class="img-fluid" :alt="regular_chef.name">
                                             <div class="social-links">
                                                 <a href="#"><i class="bi bi-instagram"></i></a>
                                                 <a href="#"><i class="bi bi-twitter-x"></i></a>
@@ -554,70 +550,9 @@
                                             </div>
                                         </div>
                                         <div class="chef-info">
-                                            <h4>Sophia Martinez</h4>
-                                            <p class="role">Pastry Chef</p>
-                                            <p class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                Donec dignissim purus a ipsum faucibus, et porttitor.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="chef-card" data-aos="zoom-in" data-aos-delay="250">
-                                        <div class="chef-img">
-                                            <img src="/img/restaurant/chef-3.webp" class="img-fluid"
-                                                alt="Chef Portrait">
-                                            <div class="social-links">
-                                                <a href="#"><i class="bi bi-instagram"></i></a>
-                                                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                                                <a href="#"><i class="bi bi-facebook"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="chef-info">
-                                            <h4>Marcus Chen</h4>
-                                            <p class="role">Sous Chef</p>
-                                            <p class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                Donec dignissim purus a ipsum faucibus, et porttitor.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="chef-card" data-aos="zoom-in" data-aos-delay="300">
-                                        <div class="chef-img">
-                                            <img src="/img/restaurant/chef-4.webp" class="img-fluid"
-                                                alt="Chef Portrait">
-                                            <div class="social-links">
-                                                <a href="#"><i class="bi bi-instagram"></i></a>
-                                                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                                                <a href="#"><i class="bi bi-facebook"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="chef-info">
-                                            <h4>Jonathan Williams</h4>
-                                            <p class="role">Head of Bar</p>
-                                            <p class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                Donec dignissim purus a ipsum faucibus, et porttitor.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="chef-card" data-aos="zoom-in" data-aos-delay="350">
-                                        <div class="chef-img">
-                                            <img src="/img/restaurant/chef-5.webp" class="img-fluid"
-                                                alt="Chef Portrait">
-                                            <div class="social-links">
-                                                <a href="#"><i class="bi bi-instagram"></i></a>
-                                                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                                                <a href="#"><i class="bi bi-facebook"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="chef-info">
-                                            <h4>Isabella Romano</h4>
-                                            <p class="role">Grill Master</p>
-                                            <p class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                Donec dignissim purus a ipsum faucibus, et porttitor.</p>
+                                            <h4>{{ regular_chef.name }}</h4>
+                                            <p class="role">{{ regular_chef.designation }}</p>
+                                            <p class="details">{{ regular_chef.details }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1248,8 +1183,13 @@ const props = defineProps({
     testimonials: Object,
     menus: Object,
     events: Object,
-    resturant: Object
+    resturant: Object,
+    chefs: Object,
+    about: Object
 })
+// console.log(props.about)
+const executive_chefs = props.chefs.filter(c => c.designation == 'Executive Chef');
+const regular_chefs = props.chefs.filter(c => c.designation != 'Executive Chef');
 const show = ref({
     display: 'none'
 });

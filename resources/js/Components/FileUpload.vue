@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-// ✅ Props: modelValue for v-model binding (array of File objects)
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -9,7 +8,6 @@ const props = defineProps({
   },
 });
 
-// ✅ Emit update:modelValue to sync with parent
 const emit = defineEmits(['update:modelValue']);
 
 // Reactive state
@@ -42,34 +40,29 @@ watch(
   { immediate: true }
 );
 
-// 🧩 File input change handler
 const onFileChange = (event) => {
   const files = Array.from(event.target.files);
   backendMsg.value = '';
 
-  // Validate all selected files
   const invalidFiles = files.filter(file => !validImageTypes.includes(file.type));
   if (invalidFiles.length > 0) {
     backendMsg.value = 'Some files were skipped. Please upload only JPEG, PNG, or HEIF images.';
   }
 
-  // Filter valid images
+  // Filter valid image
   const validFiles = files.filter(file => validImageTypes.includes(file.type));
 
   emit('update:modelValue', validFiles);
 
-  // Reset input to allow re-selecting same files
   event.target.value = '';
 };
 
-// 🗑️ Remove one file
 const removeFile = (idx) => {
   const newFiles = props.modelValue.slice();
   newFiles.splice(idx, 1);
   emit('update:modelValue', newFiles);
 };
 
-// 📤 Trigger hidden file input
 const triggerFileInput = () => {
   backendMsg.value = '';
   fileInputRef.value?.click();
@@ -78,7 +71,6 @@ const triggerFileInput = () => {
 
 <template>
   <div>
-    <!-- Hidden input field -->
     <input
       ref="fileInputRef"
       type="file"
@@ -88,7 +80,6 @@ const triggerFileInput = () => {
       hidden
     />
 
-    <!-- Upload Button -->
     <button
       type="button"
       class="bg-white text-indigo-600 border border-gray-300 px-3 py-1 rounded-md flex items-center gap-2"
@@ -102,10 +93,8 @@ const triggerFileInput = () => {
       Upload
     </button>
 
-    <!-- Error Message -->
     <p v-if="backendMsg" class="text-red-500 mt-2 text-sm">{{ backendMsg }}</p>
 
-    <!-- Image Previews -->
     <div
       v-if="imageUrls.length"
       class="flex flex-wrap gap-3 mt-3"
