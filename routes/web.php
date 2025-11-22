@@ -68,6 +68,6 @@ Route::middleware([
     // log-file url
     Route::get('logs', [LogViewerController::class, 'index']);
     Route::get('editor', function () {
-        return Inertia::render('Ckeditor');
+        return Inertia::render('Admin/Ckeditor');
     })->name('admin.editors');
 });
