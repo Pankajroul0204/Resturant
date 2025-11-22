@@ -22,6 +22,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-vue": "^7.3.0",
         "cors": "^2.8.5",
         "swiper": "^11.2.8",
         "vue-toast-notification": "^3.1.3"
