@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'warning' => fn () => $request->session()->get('warning')
             ],
             'site_name' => env('APP_NAME', 'Resturant'),
+            'ckeditor_cloud_license_key' => env('CKEDITOR_CLOUD_LICENSE_KEY')
         ]);
     }
 }

@@ -19,8 +19,9 @@
             rel="stylesheet">
 
         <!-- Favicons -->
-        <link href="/public/img/favicon.png" rel="icon">
-        <link href="/public//public/img/apple-touch-icon.png" rel="apple-touch-icon">
+         <link rel="icon" href="/img/favicon.png" type="image/png">
+         <link rel="shortcut icon" href="/img/favicon.png" type="image/png">
+         <link rel="apple-touch-icon" href="/img/favicon.png">
     </Head>
 
     <header id="header" class="header d-flex align-items-center sticky-top">
