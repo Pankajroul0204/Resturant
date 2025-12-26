@@ -19,9 +19,8 @@ use App\Models\Chef;
 use App\Models\Resturant;
 use App\Models\User;
 use App\Notifications\BookingNotification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-
+use Illuminate\Support\Facades\Cache;
 
 class FrontendController extends Controller
 {
@@ -30,12 +29,47 @@ class FrontendController extends Controller
     {
         $this->payment = new PaymentController();
     }
-    public function index(Request $req)
+    // public function index()
+    // {
+    //     $testimonial = Testimonial::get();
+    //     $resturant = Resturant::where('resturant_id', 1)->with(['images', 'user'])->get();
+    //     $menus = Menu::get();
+    //     $events = Event::getEvents();
+    //     $chef = Chef::get();
+    //     $about = About::with('chef')->first();
+    //     return Inertia::render('layout', [
+    //         'canLogin' => Route::has('login'),
+    //         'testimonials' => $testimonial,
+    //         'menus' => $menus,
+    //         'resturant' => $resturant,
+    //         'events' => $events,
+    //         'chefs' => $chef,
+    //         'about' => $about
+    //     ]);
+    // }
+    public function index()
     {
         $testimonial = Testimonial::get();
-        $resturant = Resturant::where('resturant_id', 1)->with(['images', 'user'])->get();
-        $menus = Menu::get();
-        $events = Event::getEvents();
+        if (Cache::has('resturant')) {
+            $resturant = Cache::get('resturant');
+        } else {
+            $resturant = Resturant::where('resturant_id', 1)->with(['images', 'user'])->get();
+            Cache::put('resturant', $resturant, 60);
+        }
+        
+        if (Cache::has('menus')) {
+            $menus = Cache::get('menus');
+        } else {
+            $menus = Menu::get();
+            Cache::put('menus', $menus, 60);
+        }
+
+        if (Cache::has('events')) {
+            $events = Cache::get('events');
+        } else {
+            $events = Event::getEvents();
+            Cache::put('events', $events, 60);
+        }
         $chef = Chef::get();
         $about = About::with('chef')->first();
         return Inertia::render('layout', [
@@ -45,10 +79,7 @@ class FrontendController extends Controller
             'resturant' => $resturant,
             'events' => $events,
             'chefs' => $chef,
-            'about' => $about,
-            // 'canRegister' => Route::has('register'),
-            // 'laravelVersion' => Application::VERSION,
-            // 'phpVersion' => PHP_VERSION,
+            'about' => $about
         ]);
     }
 

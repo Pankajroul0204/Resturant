@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Menu;
-
+use Spatie\LaravelPdf\Facades\Pdf;
 class MenuController extends Controller
 {
     /**
@@ -42,17 +42,17 @@ class MenuController extends Controller
             'category' => 'required|string|max:255',
             'is_available' => 'nullable|boolean',
         ]);
-         $menu = new Menu();
-            $menu->name = $data['name'];
-            $menu->description = $data['description'];
-            $menu->price = $data['price'];
-            $menu->category = $data['category'];
-            $menu->is_available = $data['is_available']??1;
+        $menu = new Menu();
+        $menu->name = $data['name'];
+        $menu->description = $data['description'];
+        $menu->price = $data['price'];
+        $menu->category = $data['category'];
+        $menu->is_available = $data['is_available'] ?? 1;
 
-            $path = ImageUpload::customSaveImage($request->file('image')[0], 'menu');
-            $menu->image = $path;
-            $menu ->save();
-            return redirect()->back()->with('success', 'Menu created successfully.');
+        $path = ImageUpload::customSaveImage($request->file('image')[0], 'menu');
+        $menu->image = $path;
+        $menu->save();
+        return redirect()->back()->with('success', 'Menu created successfully.');
     }
 
     /**
@@ -84,13 +84,30 @@ class MenuController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $menu = Menu::findOrFail($id);
+        $menu->delete();
+        return redirect()->back()->with('success', 'Menu deleted successfully.');
     }
 
-    public function menulist(){
-        $menus = Menu::paginate(10);
+    public function menulist(Request $req)
+    {
+        $query = Menu::orderBy('id', 'desc');
+        if ($req->has('search') && !empty($req->search)) {
+            $search = $req->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('price', '=', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+        $menus = $query->paginate(10);
         return Inertia::render('Admin/Menu/MenuList', [
             'data' => $menus
         ]);
+    }
+
+    public function generatepdf(Request $request){
+        Pdf::view('menupdf')->save('D:/Downloads/invoice.pdf');
     }
 }

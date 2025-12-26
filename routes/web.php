@@ -32,12 +32,14 @@ Route::middleware([
     // testimonials
     Route::match(['get', 'post'], '/testimonials', [TestimonialController::class, 'getCreateTestimonials'])->name('admin.testimonials');
     Route::get('/testimonial_list', [TestimonialController::class, 'testimonial_list'])->name('admin.testimonials_list');
+    Route::match(['get','post'],'/testimonial/edit/{id}',[TestimonialController::class,'edit'])->name('admin.testimonial.edit');
     Route::delete('/testimonial_delete/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('admin.testimonial_delete');
     // in touch
     Route::get('/customer_intouchlist', [InTouchController::class, 'intouchList'])->name('admin.intouch_list');
     // menu
     Route::resource('menu', MenuController::class);
     Route::get('/menulist', [MenuController::class, 'menulist'])->name('admin.menulist');
+    Route::delete('/delete-menu/{id}', [MenuController::class, 'menudelete'])->name('admin.menudelete');
     // chef
     Route::resource('chef', ChefController::class)->names([
         'index' => 'admin.chef.index',

@@ -1,14 +1,18 @@
 <script setup>
 // import AppLayout from '@/Layouts/AppLayout.vue';
 import AppLayout from '@/Layouts/SidebarLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import Paginator from '@/Components/PaginationComponent.vue';
+import { ref, watch } from 'vue';
+
 const props = defineProps({
     data: Object
 })
-const deleteResturant = (id) => {
+
+
+const deleteMenu = (id) => {
     if (confirm("Are you sure you want to delete this record?")) {
-        axios.delete(route('admin.heroDelete', { resturant_id: id }))
+        axios.delete(route('admin.deletemenu', { resturant_id: id }))
             .then(response => {
                 if (response.data.status == 1) {
                     alert(response.data.msg);
@@ -22,64 +26,71 @@ const deleteResturant = (id) => {
             });
     }
 }
+const filters = ref({
+    search: ''
+})
+watch(() => filters.value.search, (newValue) => {
+    if (newValue === '') {
+        router.get(route('admin.menulist'), {}, { preserveState: true, replace: true })
+    }
+})
+function search() {
+    router.get(
+        route('admin.menulist'),
+        { search: filters.value.search },
+        { preserveState: true, replace: true }
+    )
+}
 </script>
 <template>
 
     <AppLayout title="Menu List" pageName="Menu List.">
-
-        <template #header>
-            <span
-                class="px-5  text-white w-5 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 hover:underline">
-                Menu List.
-            </span>
-            <div class="float-right ">
-                <!-- Breadcrumb -->
-                <nav class="flex px-5  text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                    aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                        <li class="inline-flex items-center">
-                            <Link :href="route('dashboard')"
-                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+        <!-- Breadcrumb -->
+        <div class="float-right ">
+            <nav class="flex px-5  text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+                aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                    <li class="inline-flex items-center">
+                        <Link :href="route('dashboard')"
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                             <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                             </svg>
                             Home
-                            </Link>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 9 4-4-4-4" />
-                                </svg>
-                                <Link :href="route('admin.menuPage')"
-                                    class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
+                        </Link>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                            <Link :href="route('menu.create')"
+                                class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
                                 Add Menu</Link>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 9 4-4-4-4" />
-                                </svg>
-                                <span
-                                    class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:text-white">Menu
-                                    List</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-                <!-- Breadcrumb End-->
-            </div>
-        </template>
-
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                            <Link :href="route('menu.create')"
+                                class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:text-white">
+                                Menu
+                                List</Link>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Breadcrumb End-->
         <div class="py-12">
-
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="px-6 py-4">
@@ -106,9 +117,9 @@ const deleteResturant = (id) => {
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
-                                        <input type="search" id="table-search"
+                                        <input type="search" id="table-search" v-model="filters.search"
                                             class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Search for items">
+                                            placeholder="Search for items" @keyup="search">
                                     </div>
 
                                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -158,14 +169,14 @@ const deleteResturant = (id) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-if="props.data.data.length == 0"
+                                                <tr v-if="props.data.length == 0"
                                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 ">
                                                     <td colspan="13" class="text-center py-4 text-white">...No Record
                                                         Found...
                                                     </td>
                                                 </tr>
                                                 <template v-else>
-                                                    <tr v-for="record in data.data" :key="record"
+                                                    <tr v-for="record in props.data.data" :key="record"
                                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 ">
                                                         <!-- <td class="w-4 p-4">
                                                             <div class="flex items-center">
@@ -191,8 +202,10 @@ const deleteResturant = (id) => {
                                                                 record.description }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            <template v-if="record.is_available == 1"><span class="text-green-500">Available</span></template>
-                                                            <template v-else><span class="text-red-500">Un Available</span></template>
+                                                            <template v-if="record.is_available == 1"><span
+                                                                    class="text-green-500">Available</span></template>
+                                                            <template v-else><span class="text-red-500">Un
+                                                                    Available</span></template>
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <img :src="record.image" alt="" height="300" width="300">
@@ -201,25 +214,25 @@ const deleteResturant = (id) => {
                                                             <Link
                                                                 :href="route('admin.heroPage', { resturant_id: record.resturant_id })"
                                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                            <svg class="w-[21px] h-[21px] text-gray-800 dark:text-blue-500 hover:text-blue-900"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" fill="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
+                                                                <svg class="w-[21px] h-[21px] text-gray-800 dark:text-blue-500 hover:text-blue-900"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
                                                             </Link><br>
-                                                            <Link @click="deleteResturant(record.resturant_id)" href="#"
+                                                            <Link @click="deleteMenu(record.id)" href="#"
                                                                 class="font-medium text-blue-600 dark:text-red-500 hover:underline">
-                                                            <svg class="w-[21px] h-[21px] text-gray-800 dark:text-red-500 hover:text-red-900"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" fill="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
+                                                                <svg class="w-[21px] h-[21px] text-gray-800 dark:text-red-500 hover:text-red-900"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
 
                                                             </Link>
                                                         </td>
@@ -234,12 +247,12 @@ const deleteResturant = (id) => {
                                                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.from
-                                                }}-{{ props.data.to }}</span> of
+                                                    }}-{{ props.data.to }}</span> of
                                                 <span class="font-semibold text-gray-900 dark:text-black">{{
                                                     props.data.total
-                                                    }}</span></span>
+                                                }}</span></span>
                                             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                                               <Paginator :links="props.data.links"></Paginator>
+                                                <Paginator :links="props.data.links"></Paginator>
                                             </ul>
                                         </nav>
                                     </div>

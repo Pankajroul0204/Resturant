@@ -1129,7 +1129,7 @@
         </div>
 
         <div class="container copyright text-center mt-4">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">{{props.resturant[0].resturant_name ??'Resturant Name'}}</strong> <span>All Rights
+            <p>© <span>{{ new Date().getFullYear() }} Copyright</span> <strong class="px-1 sitename">{{props.resturant[0].resturant_name ??'Resturant Name'}}</strong> <span>All Rights
                     Reserved</span></p>
             <div class="credits">
                 Designed by <a href="#">Pankaj</a>
@@ -1187,7 +1187,6 @@ const props = defineProps({
     chefs: Object,
     about: Object
 })
-// console.log(props.about)
 const executive_chefs = props.chefs.filter(c => c.designation == 'Executive Chef');
 const regular_chefs = props.chefs.filter(c => c.designation != 'Executive Chef');
 const show = ref({
